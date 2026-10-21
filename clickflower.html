@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flower Garden 🌸</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #030309;
+  overflow: hidden;
+  font-family: Georgia, serif;
+}
+
+#garden {
+  height: 100vh;
+  height: 100dvh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at bottom, #122018, #030309 65%);
+  cursor: crosshair;
+  touch-action: manipulation;
+}
+
+.message {
+  position: absolute;
+  top: 35%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  pointer-events: none;
+}
+
+.message h2 {
+  font-weight: normal;
+  font-size: clamp(22px, 5vw, 34px);
+  text-shadow: 0 0 15px #ff43c6;
+}
+
+.message p {
+  font: 12px Arial, sans-serif;
+  color: #bcb6c8;
+}
+
+.flower {
+  position: absolute;
+  bottom: 0;
+  width: 120px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  animation: grow 1.3s ease-out both;
+}
+
+.stem {
+  position: absolute;
+  inset: 0;
+  width: 120px;
+  height: 100%;
+  overflow: visible;
+}
+
+.stem path {
+  fill: none;
+  stroke: #64b96a;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.blossom {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  left: var(--head-x);
+  top: 0;
+  transform: translate(-50%, -50%) scale(0);
+  animation: bloom .8s 1s cubic-bezier(.2, 1.5, .4, 1) forwards;
+  filter: drop-shadow(0 0 8px var(--glow));
+}
+
+.petal {
+  position: absolute;
+  width: 27%;
+  height: 45%;
+  left: 36.5%;
+  top: 5%;
+  border-radius: 50% 50% 40% 40%;
+  transform-origin: 50% 100%;
+  transform: rotate(var(--angle));
+  background: linear-gradient(
+    to top,
+    var(--c1),
+    var(--c2) 65%,
+    #fff5c5
+  );
+}
+
+.center {
+  position: absolute;
+  width: 17%;
+  height: 17%;
+  left: 41.5%;
+  top: 41.5%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffbd1, #ffbe32, #ff762d);
+  box-shadow: 0 0 10px #ffcf54;
+}
+
+.leaf {
+  position: absolute;
+  width: 24px;
+  height: 12px;
+  border-radius: 100% 0 100% 0;
+  background: linear-gradient(135deg, #a6ec7a, #21763d);
+}
+
+.sparkle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #fff3b7;
+  box-shadow: 0 0 12px #ff63dc;
+  pointer-events: none;
+  animation: shine .9s ease-out forwards;
+}
+
+@keyframes grow {
+  from { height: 0; }
+  to { height: var(--height); }
+}
+
+@keyframes bloom {
+  to { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes shine {
+  to {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) scale(0);
+  }
+}
+</style>
+</head>
+
+<body>
+<div id="garden">
+  <div class="message">
+    <h2>Click To Add Flowers</h2>
+    <p>Touch the screen and watch them bloom ✿</p>
+  </div>
+</div>
+
+<script>
+const garden = document.getElementById("garden");
+
+const colors = [
+  ["#ff087f", "#ff45cf", "#ff40d0"],
+  ["#ff493b", "#ffb52d", "#ff6849"],
+  ["#9c28ff", "#ed63ff", "#bc43ff"],
+  ["#ff548f", "#ffc85b", "#ff71ba"],
+  ["#f51eb3", "#ff69d1", "#ff3fca"]
+];
+
+function random(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function createFlower(x, clickY) {
+  const height = Math.max(100, garden.clientHeight - clickY);
+  const size = random(48, 72);
+  const bend = random(-30, 30);
+  const headX = 60 + random(-25, 25);
+  const palette = colors[Math.floor(Math.random() * colors.length)];
+
+  const flower = document.createElement("div");
+  flower.className = "flower";
+  flower.style.left = x + "px";
+  flower.style.setProperty("--height", height + "px");
+
+  // Curved stem
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "stem");
+  svg.setAttribute("viewBox", `0 0 120 ${height}`);
+  svg.setAttribute("preserveAspectRatio", "none");
+
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute(
+    "d",
+    `M60 ${height} Q${60 + bend} ${height * 0.5} ${headX} 2`
+  );
+  svg.appendChild(path);
+  flower.appendChild(svg);
+
+  // Leaves
+  for (let i = 0; i < 2; i++) {
+    const leaf = document.createElement("div");
+    leaf.className = "leaf";
+    leaf.style.bottom = height * (i === 0 ? 0.35 : 0.65) + "px";
+    leaf.style.left = (i === 0 ? 48 : 60) + "px";
+    leaf.style.transform = i === 0 ? "rotate(25deg)" : "rotate(205deg)";
+    flower.appendChild(leaf);
+  }
+
+  // Flower head attached to the top of the stem
+  const blossom = document.createElement("div");
+  blossom.className = "blossom";
+  blossom.style.setProperty("--size", size + "px");
+  blossom.style.setProperty("--head-x", headX + "px");
+  blossom.style.setProperty("--glow", palette[2]);
+  blossom.style.setProperty("--c1", palette[0]);
+  blossom.style.setProperty("--c2", palette[1]);
+
+  for (let i = 0; i < 9; i++) {
+    const petal = document.createElement("div");
+    petal.className = "petal";
+    petal.style.setProperty("--angle", (i * 360 / 9) + "deg");
+    blossom.appendChild(petal);
+  }
+
+  // Inner petals
+  for (let i = 0; i < 6; i++) {
+    const petal = document.createElement("div");
+    petal.className = "petal";
+    petal.style.width = "21%";
+    petal.style.height = "34%";
+    petal.style.left = "39.5%";
+    petal.style.top = "16%";
+    petal.style.setProperty("--angle", (i * 60 + 20) + "deg");
+    blossom.appendChild(petal);
+  }
+
+  const center = document.createElement("div");
+  center.className = "center";
+  blossom.appendChild(center);
+
+  flower.appendChild(blossom);
+  garden.appendChild(flower);
+
+  // Sparkles at the clicked position
+  for (let i = 0; i < 10; i++) {
+    const dot = document.createElement("div");
+    dot.className = "sparkle";
+    dot.style.left = x + "px";
+    dot.style.top = clickY + "px";
+    dot.style.setProperty("--dx", random(-45, 45) + "px");
+    dot.style.setProperty("--dy", random(-45, 45) + "px");
+    garden.appendChild(dot);
+
+    setTimeout(() => dot.remove(), 1000);
+  }
+}
+
+// No flowers are created until a click happens
+garden.addEventListener("click", function(event) {
+  const rect = garden.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  createFlower(x, y);
+});
+</script>
+</body>
+</html>

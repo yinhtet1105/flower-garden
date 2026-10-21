@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blooming Garden 🌸</title>
+  <link rel="stylesheet" href="flower.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="garden" id="garden">
+    <div class="stars" id="stars"></div>
+
+    <div class="moon"></div>
+
+    <header class="heading">
+      <p class="eyebrow">A LITTLE GARDEN OF MAGIC</p>
+      <h1>Let Love <span>Bloom</span></h1>
+      <p class="subtitle">Every flower begins with a little hope.</p>
+      <p class="hint">✧ Touch anywhere to grow a flower ✧</p>
+    </header>
+
+    <svg
+      id="gardenSvg"
+      viewBox="0 0 900 600"
+      preserveAspectRatio="none"
+      aria-label="Click anywhere to grow flowers"
+    >
+      <defs>
+        <linearGradient id="stemGradient" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#397653"/>
+          <stop offset="50%" stop-color="#9cdaa0"/>
+          <stop offset="100%" stop-color="#286047"/>
+        </linearGradient>
+
+        <radialGradient id="pinkPetal">
+          <stop offset="0%" stop-color="#fff3f8"/>
+          <stop offset="65%" stop-color="#ff9fca"/>
+          <stop offset="100%" stop-color="#e85c9d"/>
+        </radialGradient>
+
+        <radialGradient id="purplePetal">
+          <stop offset="0%" stop-color="#fff2ff"/>
+          <stop offset="65%" stop-color="#d4a5ff"/>
+          <stop offset="100%" stop-color="#9860dc"/>
+        </radialGradient>
+
+        <radialGradient id="peachPetal">
+          <stop offset="0%" stop-color="#fff7db"/>
+          <stop offset="65%" stop-color="#ffc18f"/>
+          <stop offset="100%" stop-color="#f17c78"/>
+        </radialGradient>
+
+        <radialGradient id="whitePetal">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="70%" stop-color="#fff0d7"/>
+          <stop offset="100%" stop-color="#e8b7d1"/>
+        </radialGradient>
+
+        <radialGradient id="flowerCenter">
+          <stop offset="0%" stop-color="#fff9b0"/>
+          <stop offset="60%" stop-color="#ffce57"/>
+          <stop offset="100%" stop-color="#e89b35"/>
+        </radialGradient>
+      </defs>
+
+      <ellipse
+        cx="450" cy="610" rx="650" ry="100"
+        fill="#071e29" opacity=".45"
+      />
+
+      <g id="plantLayer"></g>
+    </svg>
+
+    <div class="click-ripple-layer" id="ripples"></div>
+
+    <footer class="footer-note">
+      Made with love, just for you <span>♡</span>
+    </footer>
+  </main>
+
+  <script src="flower.js"></script>
+</body>
+</html>
